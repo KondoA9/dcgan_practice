@@ -7,7 +7,8 @@ import input_data
 mnist = input_data.read_data_sets("MNIST_data", one_hot=True)
 tf.disable_eager_execution()
 #PATH
-mnist_PATH="./checkpoints/mnist/model"
+check_Path = "./checkpoints/mnist/"
+mnist_PATH = "./checkpoints/mnist/model"
 # 補助関数の定義
 # 1次元ベクトル化
 def tensor_to_vector(input):
@@ -161,7 +162,7 @@ optimizer_d = tf.train.AdamOptimizer(0.0002, beta1=0.5).minimize(d_cost_tf, var_
 optimizer_g = tf.train.AdamOptimizer(0.0002, beta1=0.5).minimize(g_cost_tf, var_list=gen_vars)
 # TensorFlow内のグローバル変数の初期化
 saver = tf.train.Saver()
-ckpt = tf.train.get_checkpoint_state(mnist_PATH)
+ckpt = tf.train.get_checkpoint_state(check_Path)
 if ckpt:
     saver.restore(sess, mnist_PATH)
     print("latest model is loaded")
@@ -172,14 +173,14 @@ else:
 from matplotlib import pyplot as plt
 
 #ステップの記録
-global_step=0
-def addStep():
-    add_op=tf.add(dcgan_model.global_step_var,1)
-    cnt_up_op=tf.assign(dcgan_model.global_step_var, add_op)
+global_step = 0
+def add_step():
+    add_op = tf.add(dcgan_model.global_step_var,1)
+    cnt_up_op = tf.assign(dcgan_model.global_step_var, add_op)
     global global_step
-    global_step=sess.run(cnt_up_op)
+    global_step = sess.run(cnt_up_op)
 
-def getGlobalStep():
+def get_steps():
     global global_step
     return global_step
 
@@ -201,7 +202,7 @@ def visualize(images, num_itr, rows, cols):
 # 学習
 def train(train_imgs, n_epochs, batch_size):
     itr = 0
-    for epoch in range(1,n_epochs+1):
+    for epoch in range(1,n_epochs + 1):
         index = np.arange(len(train_imgs))
         np.random.shuffle(index)
         trX = train_imgs[index]
@@ -236,20 +237,19 @@ def train(train_imgs, n_epochs, batch_size):
             #print("Average P(real)=", p_real_val.mean())
             #print("Average P(gen)=", p_gen_val.mean())
             itr += 1
-        addStep()
-        print("epoch = ", getGlobalStep() - epoch," + ",epoch," = ",getGlobalStep())
+        add_step()
+        print("epoch = ", get_steps() - epoch," + ",epoch," = ",get_steps())
         if epoch % 25 == 0:
             # サンプルを表示
             z = np.random.uniform(-1,1, size=[32, dcgan_model.dim_z]).astype(np.float32)
             generated_samples = sess.run([image_gen], feed_dict={Z_gen:z})
             #plt.imshow(generated_samples[0][0].reshape(28,28), cmap="gray",
             #interpolation="nearest")
-            visualize(generated_samples[0], getGlobalStep(), 4,8)
+            visualize(generated_samples[0], get_steps(), 4,8)
             #save
             saver.save(sess, mnist_PATH)
             print("save parameters of step " + str(epoch))
 
 
-
-train(mnist.test.images, 300, 128)
+train(mnist.test.images, 20, 128)
 sess.close()

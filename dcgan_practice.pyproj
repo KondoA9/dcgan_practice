@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>b49ff403-1b23-4e27-94c1-3882cc39b21a</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>dcgan_practice.py</StartupFile>
+    <StartupFile>dcgan_mnist.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,7 +21,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="dcgan_practice.py" />
+    <Compile Include="dcgan_mnist.py" />
     <Compile Include="input_data.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
